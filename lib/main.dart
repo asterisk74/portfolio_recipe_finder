@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:recipe_finder/features/food/food_page.dart';
+import 'package:recipe_finder/config/router.dart';
 import 'package:recipe_finder/injection_container.dart';
-import 'features/recipes/home_page.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await initializeDependencies();
 
   runApp(const MyApp());
@@ -19,15 +20,14 @@ class MyApp extends StatelessWidget {
       value: SystemUiOverlayStyle.dark.copyWith(
         statusBarColor: Colors.transparent,
       ),
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'Recipe Finder',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.teal,
           primaryColor: Colors.white,
         ),
-        routes: {'/food_page': (context) => const FoodPage()},
-        home: const HomePage(),
+        routerConfig: router,
       ),
     );
   }

@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/recipe.dart';
 
 class HomeRecipe extends StatelessWidget {
   final RecipeEntity recipe;
+  final Orientation orientation;
 
-  const HomeRecipe({super.key, required this.recipe});
+  const HomeRecipe({
+    super.key,
+    required this.recipe,
+    this.orientation = Orientation.landscape,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +23,12 @@ class HomeRecipe extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        Navigator.pushNamed(context, '/food_page');
+        context.push(
+          context.namedLocation(
+            'recipe_details',
+            pathParameters: <String, String>{'id': recipe.id.toString()},
+          ),
+        );
       },
       child: CachedNetworkImage(
         imageUrl: recipe.image!,

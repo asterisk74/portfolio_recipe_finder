@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:recipe_finder/features/recipes/presentation/bloc/remote_random_recipes/remote_recipe_bloc.dart';
-import 'package:recipe_finder/features/recipes/presentation/bloc/remote_recipes/cubit.dart';
 import 'package:recipe_finder/injection_container.dart';
 
+import 'presentation/bloc/local_favorites/cubit.dart';
+import 'presentation/bloc/remote_autocomplete/cubit.dart';
+import 'presentation/bloc/remote_random_recipes/remote_recipe_bloc.dart';
 import 'presentation/widgets/favorites_list.dart';
 import 'presentation/widgets/just_for_you_list.dart';
 import 'presentation/widgets/recipe_filter_bar.dart';
@@ -19,9 +20,10 @@ class HomePage extends StatelessWidget {
         BlocProvider<RemoteRandomRecipeBloc>(
           create: (context) => sl()..add(const GetRandomRecipe()),
         ),
-        BlocProvider<RemoteRecipesCubit>(
-          create: (context) => sl()..getRecipes(),
+        BlocProvider<LocalFavoriteRecipesCubit>(
+          create: (context) => sl()..getFavorites(),
         ),
+        BlocProvider<RemoteRecipeAutocompleteCubit>(create: (context) => sl()),
       ],
       child: Scaffold(
         body: Container(
@@ -39,6 +41,7 @@ class HomePage extends StatelessWidget {
           child: SafeArea(
             child: Column(
               children: [
+                // Custom Appbar
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: Align(

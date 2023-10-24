@@ -1,18 +1,30 @@
+import 'package:recipe_finder/features/recipes/domain/entities/recipe.dart';
+import 'package:recipe_finder/features/recipes/domain/entities/recipe_autocomplete.dart';
+
 import '../../../../core/resources/data_state.dart';
 import '../../data/models/params.dart';
-import '../../data/models/recipe.dart';
 
 abstract class RecipeRepository {
-  Future<DataState<RecipeModel>> getRecipe(
+  // Remote methods
+  Future<DataState<List<RecipeAutoCompleteEntity>>> autocomplete(String? q);
+
+  Future<DataState<RecipeEntity>> getRecipe(
     int id, {
     RecipeInformationParams? params,
   });
 
-  Future<DataState<List<RecipeModel>>> getRecipes({
+  Future<DataState<List<RecipeEntity>>> getRecipes({
     RecipeBulkInformationParams? params,
   });
 
-  Future<DataState<List<RecipeModel>>> getRandomRecipes({
+  Future<DataState<List<RecipeEntity>>> getRandomRecipes({
     RandomRecipeParams? params,
   });
+
+  // LOCAL methods
+  Future<List<RecipeEntity>> getFavoriteRecipes();
+
+  Future<void> saveToFavorites(RecipeEntity recipe);
+
+  Future<void> removeFavorite(RecipeEntity recipe);
 }

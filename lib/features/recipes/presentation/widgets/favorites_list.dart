@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/remote_recipes/cubit.dart';
+import '../bloc/local_favorites/cubit.dart';
+import 'home_recipe.dart';
 
 class FavoritesList extends StatelessWidget {
   const FavoritesList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RemoteRecipesCubit, RemoteRecipesState>(
+    return BlocBuilder<LocalFavoriteRecipesCubit, LocalFavoriteRecipesState>(
       builder: (_, state) {
-        if (state is RemoteRecipesLoading) {
+        final recipes = state.recipes ?? [];
+
+        if (state is LocalFavoriteRecipesLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (state is RemoteRecipesError) {
+        if (state is LocalFavoriteRecipesError) {
           return const Center(child: Text('Error'));
         }
 
-        if (state is RemoteRecipesDone && state.recipes != null) {
+        if (state is LocalFavoriteRecipesDone && recipes.isNotEmpty) {
           return SizedBox(
             height: 270,
             child: Column(
@@ -53,16 +56,15 @@ class FavoritesList extends StatelessWidget {
                 Expanded(
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    itemCount: 10,
+                    itemCount: state.recipes!.length,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     separatorBuilder: (context, index) {
                       return const SizedBox(width: 15);
                     },
                     itemBuilder: (context, index) {
-                      return Container(
-                        height: 100,
-                        width: 100,
-                        color: Colors.red,
+                      return HomeRecipe(
+                        recipe: state.recipes![index],
+                        orientation: Orientation.portrait,
                       );
                     },
                   ),

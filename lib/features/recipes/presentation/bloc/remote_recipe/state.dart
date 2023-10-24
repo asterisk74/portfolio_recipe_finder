@@ -20,10 +20,10 @@ class RemoteRecipeDone extends RemoteRecipeState {
   List<Object?> get props => [recipe];
 }
 
-class RemoteRecipesError extends RemoteRecipeState {
+class RemoteRecipeError extends RemoteRecipeState {
   final DioException error;
 
-  const RemoteRecipesError(this.error);
+  const RemoteRecipeError(this.error);
 
   @override
   List<Object?> get props => [error];
