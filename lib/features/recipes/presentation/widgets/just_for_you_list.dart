@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../bloc/remote_random_recipes/remote_recipe_bloc.dart';
 import 'home_recipe.dart';
@@ -11,6 +12,8 @@ class JustForYouList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RemoteRandomRecipeBloc, RemoteRandomRecipeState>(
       builder: (_, state) {
+        final recipes = state.recipes ?? [];
+
         if (state is RemoteRandomRecipeLoading) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -19,27 +22,27 @@ class JustForYouList extends StatelessWidget {
           return const Center(child: Text('Error'));
         }
 
-        if (state is RemoteRandomRecipeDone) {
+        if (state is RemoteRandomRecipeDone && recipes.isNotEmpty) {
           return ListView.separated(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: state.recipes!.length + 1,
+            itemCount: recipes.length + 1,
             padding: const EdgeInsets.only(bottom: 15, left: 20, right: 20),
             separatorBuilder: (context, index) {
               return const SizedBox(height: 18);
             },
             itemBuilder: (_, index) {
               if (index <= 0) {
-                return const Text(
-                  'Just for you',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
+                return Text(
+                  'Just For You',
+                  style: GoogleFonts.roboto(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 20,
                   ),
                 );
               }
 
-              return HomeRecipe(recipe: state.recipes![index - 1]);
+              return HomeRecipe(recipe: recipes[index - 1]);
             },
           );
         }
